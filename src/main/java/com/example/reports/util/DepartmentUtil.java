@@ -24,18 +24,15 @@ public class DepartmentUtil {
     }
 
     private void fillFirstForma() {
-        // TODO: 19.11.2022 заполнить мапу <название отделения, строка в финальном отчете>
         fillFirstFormaBaza();
     }
 
     private void fillDailyForma() {
-        // TODO: 19.11.2022 заполнить мапу <название отделения, строка в финальном отчете>
         fillFirstSheet();
         fillSecondSheet();
     }
 
     private void fillFourteenForma() {
-        // TODO: 19.11.2022 заполнить мапу <название отделения, строка в финальном отчете>
         fourteenForma.put("b67", 19);
         fourteenForma.put("b67.0", 19);
         fourteenForma.put("b67.3", 19);

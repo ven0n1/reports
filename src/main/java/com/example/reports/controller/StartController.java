@@ -1,37 +1,21 @@
 package com.example.reports.controller;
 
-import com.example.reports.service.DailyFormFirstSheetService;
-import com.example.reports.service.DailyFormSecondSheetService;
-import com.example.reports.service.FirstFormBazaService;
-import com.example.reports.service.FirstFormPostService;
-import com.example.reports.service.FourteenFormService;
 import com.example.reports.service.ReportService;
 import com.example.reports.service.ReportsSaving;
+import com.example.reports.service.SecondFormService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import static com.example.reports.util.PathsConstants.FOR_DAILY;
-import static com.example.reports.util.PathsConstants.FOR_DAILY_FIRST;
-import static com.example.reports.util.PathsConstants.FOR_DAILY_SECOND;
-import static com.example.reports.util.PathsConstants.FOR_FIRST;
-import static com.example.reports.util.PathsConstants.FOR_FIRST_BAZA;
-import static com.example.reports.util.PathsConstants.FOR_FIRST_POST;
-import static com.example.reports.util.PathsConstants.FOR_FOURTEEN;
-import static com.example.reports.util.PathsConstants.FOR_FOURTEEN_BAZA;
+import static com.example.reports.util.PathsConstants.FOR_SECOND_BAZA;
 import static com.example.reports.util.PathsConstants.FROM_BAZA;
-import static com.example.reports.util.PathsConstants.FROM_POST;
 
 @RestController
 @Slf4j
@@ -56,9 +40,13 @@ public class StartController {
 //        checkSpecificService(FirstFormPostService.class);
 //        reportsSaving.saveToFirstForm();
 
-        copyToDirectory(FOR_FOURTEEN_BAZA, FROM_BAZA);
-        checkSpecificService(FourteenFormService.class);
-        reportsSaving.saveToFourteenForm();
+//        copyToDirectory(FOR_FOURTEEN_BAZA, FROM_BAZA);
+//        checkSpecificService(FourteenFormService.class);
+//        reportsSaving.saveToFourteenForm();
+
+        copyToDirectory(FOR_SECOND_BAZA, FROM_BAZA);
+        checkSpecificService(SecondFormService.class);
+        reportsSaving.saveToSecondForm(); // в столбец: всего (5б 23) нужно самостоятельно закинуть (лень это в коде прописывать)
     }
 
 //    public static void main(String[] args) {

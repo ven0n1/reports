@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.util.Map;
@@ -20,7 +19,6 @@ public interface ReportService {
     Map<String, Data> getResult();
 
     default Sheet getSheet(Path from) throws Exception {
-        // TODO: 19.11.2022 считать excel, вернуть sheet
         try (FileInputStream file = new FileInputStream(from.toFile())) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             return workbook.getSheetAt(0);

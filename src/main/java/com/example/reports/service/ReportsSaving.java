@@ -3,10 +3,12 @@ package com.example.reports.service;
 import com.example.reports.config.AppConfig;
 import com.example.reports.entity.Data;
 import com.example.reports.entity.People;
+import com.example.reports.entity.SecondFormPeople;
 import com.example.reports.util.DepartmentUtil;
 import com.example.reports.util.PathsConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.util.Pair;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -26,8 +28,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class ReportsSaving {
-
     private static final String CURRENT_ENTRY = "current entry: {}";
+
     private static final String BEGIN_FILL = "begin fill: {}";
     private static final String DEPARTMENT_UTIL_BUT_NOT_RESUL = "DepartmentUtil has: {}, but result does not";
 
@@ -41,6 +43,7 @@ public class ReportsSaving {
     private List<Integer> dailySecondColumns;
     private List<Integer> dailyThirdColumns;
     private List<Integer> fourteenColumns;
+    private List<Integer> secondColumns;
 
     @PostConstruct
     void init() {
@@ -50,6 +53,7 @@ public class ReportsSaving {
         dailySecondColumns = appConfig.getTo().getDailyForm().get("secondSheet");
         dailyThirdColumns = appConfig.getTo().getDailyForm().get("thirdSheet");
         fourteenColumns = appConfig.getTo().getFourteenForm();
+        secondColumns = appConfig.getTo().getSecondForm();
     }
 
     public void saveToFirstForm() throws Exception {
@@ -57,7 +61,7 @@ public class ReportsSaving {
         Map<String, Data> post = getResult(FirstFormPostService.class);
         Map<String, Data> baza = getResult(FirstFormBazaService.class);
         try (FileInputStream file = new FileInputStream(PathsConstants.FIRST_TEMPLATE.toFile());
-             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "30 forma.xlsx").toFile())){
+             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "0_30 forma.xlsx").toFile())){
             XSSFWorkbook workbook = new XSSFWorkbook(file);
 
             fillBazaTable(baza, workbook);
@@ -72,7 +76,7 @@ public class ReportsSaving {
         Map<String, Data> first = getResult(DailyFormFirstSheetService.class);
         Map<String, Data> secondAndThird = getResult(DailyFormSecondSheetService.class);
         try (FileInputStream file = new FileInputStream(PathsConstants.DAILY_TEMPLATE.toFile());
-             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "dnevnoy.xlsx").toFile())) {
+             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "0_dnevnoy.xlsx").toFile())) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
 
             fillTableOne(first, workbook);
@@ -87,7 +91,7 @@ public class ReportsSaving {
         log.info("saveToFourteenForm() method invoked");
         Map<String, Data> fourteen = getResult(FourteenFormService.class);
         try (FileInputStream file = new FileInputStream(PathsConstants.FOURTEEN_TEMPLATE.toFile());
-             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "14 forma.xlsx").toFile())){
+             FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "0_14 forma.xlsx").toFile())){
             XSSFWorkbook workbook = new XSSFWorkbook(file);
 
             String key;
@@ -142,6 +146,36 @@ public class ReportsSaving {
 
             groupByMKB(firstSheet);
             workbook.write(out);
+        }
+    }
+
+    public void saveToSecondForm() throws Exception {
+        log.info("saveToSecondForm() method invoked");
+        for (ReportService service : reports) {
+            if (service.getClass().equals(SecondFormService.class)) {
+                Map<String, Pair<SecondFormPeople, SecondFormPeople>> result = ((SecondFormService) service).getSecondFormResult();
+                try (FileInputStream file = new FileInputStream(PathsConstants.SECOND_TEMPLATE.toFile());
+                     FileOutputStream out = new FileOutputStream(Path.of(PathsConstants.templates, "0_forma 2910.xlsx").toFile())) {
+                    XSSFWorkbook workbook = new XSSFWorkbook(file);
+                    XSSFSheet sheet = workbook.getSheet("Таблица2910");
+                    Pair<SecondFormPeople, SecondFormPeople> pair = result.get("first");
+                    setAdditionValue(sheet.getRow(6), secondColumns, convertPairToValues(pair));
+                    pair = result.get("second");
+                    setAdditionValue(sheet.getRow(7), secondColumns, convertPairToValues(pair));
+                    pair = result.get("third");
+                    setAdditionValue(sheet.getRow(8), secondColumns, convertPairToValues(pair));
+                    pair = result.get("fourth");
+                    setAdditionValue(sheet.getRow(9), secondColumns, convertPairToValues(pair));
+                    pair = result.get("fifth");
+                    setAdditionValue(sheet.getRow(10), secondColumns, convertPairToValues(pair));
+                    pair = result.get("sixth");
+                    setAdditionValue(sheet.getRow(11), secondColumns, convertPairToValues(pair));
+                    pair = result.get("seventh");
+                    setAdditionValue(sheet.getRow(12), secondColumns, convertPairToValues(pair));
+                    workbook.write(out);
+                }
+                return;
+            }
         }
     }
 
@@ -328,6 +362,33 @@ public class ReportsSaving {
                 log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
+    }
+
+    private Integer[] convertPairToValues(Pair<SecondFormPeople, SecondFormPeople> pair) {
+        Integer[] columnValues = new Integer[32];
+        SecondFormPeople alive = pair.getFirst();
+        SecondFormPeople dead = pair.getSecond();
+        List<SecondFormPeople> both = List.of(alive, dead);
+        for (int i = 0; i < 2; i++) {
+            int add = 16 * i;
+            columnValues[0 + add] = both.get(i).getBelow14();
+            columnValues[1 + add] = both.get(i).getBetween15_19();
+            columnValues[2 + add] = both.get(i).getBetween20_24();
+            columnValues[3 + add] = both.get(i).getBetween25_29();
+            columnValues[4 + add] = both.get(i).getBetween30_34();
+            columnValues[5 + add] = both.get(i).getBetween35_39();
+            columnValues[6 + add] = both.get(i).getBetween40_44();
+            columnValues[7 + add] = both.get(i).getBetween45_49();
+            columnValues[8 + add] = both.get(i).getBetween50_54();
+            columnValues[9 + add] = both.get(i).getBetween55_59();
+            columnValues[10 + add] = both.get(i).getBetween60_64();
+            columnValues[11 + add] = both.get(i).getBetween65_69();
+            columnValues[12 + add] = both.get(i).getBetween70_74();
+            columnValues[13 + add] = both.get(i).getBetween75_79();
+            columnValues[14 + add] = both.get(i).getBetween80_84();
+            columnValues[15 + add] = both.get(i).getAbove85();
+        }
+        return columnValues;
     }
 
     private void checkDepartmentUtilMapKeys(Set<String> departmentUtilMapKeys, Set<String> resultMapKeys) {

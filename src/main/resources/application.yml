@@ -4,6 +4,8 @@ app:
     baza: 1, 27, 5, 19, 18, 16, 17, 22, 22, 28
 #    отделение, пол, возраст, город/село, профиль койки (0, 3, 5, 6, 35)
     post: 6, 15, 12, 13, 10
+#    отделение, МКБ, возраст, результат
+    secondFormBaza: 1, 16, 5, 18
   to:
     dailyForm:
       firstSheet: 7, 8, 9, 11, 12, 13
@@ -13,10 +15,19 @@ app:
       baza: 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23
       post: 6, 7, 8, 9, 10
     fourteenForm: 3, 4, 5, 6, 8, 13, 14, 15, 16, 18, 23, 24, 25, 27, 31
+    secondForm: 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,  24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39
   age:
     woman: 56
     man: 61
   tempValue: 16255.0
+  secondFormMkbCodes:
+    first: e10, e11, e13, e14
+    second: i10, i11, i12, i13
+    third: i25
+    fourth: j40, j41, j42, j43
+    fifth: j44
+    sixth: j47
+    seventh: j45, j46
 logging:
   level:
     com.example.reports: info

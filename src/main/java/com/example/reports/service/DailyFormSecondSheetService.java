@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,9 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.reports.util.PathsConstants.BAZA;
 import static com.example.reports.util.PathsConstants.FOR_DAILY;
-import static com.example.reports.util.PathsConstants.FOR_DAILY_FIRST;
 import static com.example.reports.util.PathsConstants.FOR_DAILY_SECOND;
 
 //works with baza
@@ -45,7 +42,6 @@ public class DailyFormSecondSheetService implements ReportService {
     @Override
     public void process() throws Exception{
         log.info("start process of {}", DailyFormSecondSheetService.class.getName());
-        // TODO: 19.11.2022 открыть excel из origin/for_daily считывать строки, вызывать маппер
         Sheet sheet = getSheet(FOR_DAILY_SECOND);
         log.debug("Sheet name: " + sheet.getSheetName());
         Iterator<Row> rowIterator = sheet.rowIterator();

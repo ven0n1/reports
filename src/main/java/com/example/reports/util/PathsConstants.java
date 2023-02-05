@@ -25,7 +25,6 @@ public class PathsConstants {
 
     public static final Path FROM_BAZA = Path.of(src, BAZA);
     public static final Path FROM_POST = Path.of(src, POST);
-    public static final Path FROM_TEMP = Path.of(src, TEMP);
     public static final Path FOR_DAILY = Path.of(src, "for_daily");
     public static final Path FOR_DAILY_FIRST = FOR_DAILY.resolve("dailyFirst.xlsx");
     public static final Path FOR_DAILY_SECOND = FOR_DAILY.resolve("dailySecond.xlsx");
@@ -34,9 +33,12 @@ public class PathsConstants {
     public static final Path FOR_FIRST_POST = FOR_FIRST.resolve(POST);
     public static final Path FOR_FOURTEEN = Path.of(src, "for_fourteen");
     public static final Path FOR_FOURTEEN_BAZA = FOR_FOURTEEN.resolve("fourteen.xlsx");
+    public static final Path FOR_SECOND = Path.of(src, "for_second");
+    public static final Path FOR_SECOND_BAZA = FOR_SECOND.resolve("second.xlsx");
     public static final Path DAILY_TEMPLATE = Path.of(templates, "daily_form.xlsx");
     public static final Path FIRST_TEMPLATE = Path.of(templates, "first_form.xlsx");
     public static final Path FOURTEEN_TEMPLATE = Path.of(templates, "fourteen_form.xlsx");
+    public static final Path SECOND_TEMPLATE = Path.of(templates, "2910.xlsx");
 
     private PathsConstants() {}
 }

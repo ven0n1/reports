@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.xlsx
+!**/templates/*.xlsx
 
 ### STS ###
 .apt_generated

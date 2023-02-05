@@ -16,11 +16,13 @@ public class AppConfig {
     private To to;
     private Map<String, Integer> age;
     private String tempValue;
+    private Map<String, List<String>> secondFormMkbCodes;
 
     @Data
     public static class From {
 
         private List<Integer> baza;
+        private List<Integer> secondFormBaza;
         private List<Integer> post;
     }
 
@@ -30,5 +32,6 @@ public class AppConfig {
         private Map<String, List<Integer>> dailyForm;
         private Map<String, List<Integer>> firstForm;
         private List<Integer> fourteenForm;
+        private List<Integer> secondForm;
     }
 }

@@ -3,12 +3,13 @@ package com.example.reports.mapper;
 import com.example.reports.config.AppConfig;
 import com.example.reports.entity.Data;
 import com.example.reports.entity.People;
+import com.example.reports.entity.SecondFormPeople;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.util.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,8 @@ import javax.annotation.PostConstruct;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,10 +30,12 @@ import java.util.function.Supplier;
 public class RowToDataMapper {
 
     private final Map<String, Data> result = new HashMap<>();
+    private Map<String, Pair<SecondFormPeople, SecondFormPeople>> secondFormResult = new HashMap<>();
     private final AppConfig appConfig;
 
     private int ageWoman;
     private int ageMan;
+    private Map<String, List<String>> secondFormMkbCodes;
 
     private final Map<CellType, Function<Cell, String>> cellToString = new EnumMap<>(CellType.class);
     private String profile;
@@ -55,6 +58,7 @@ public class RowToDataMapper {
         cellToString.put(CellType.FORMULA, cell -> String.valueOf(cellToString.get(cell.getCachedFormulaResultType()).apply(cell)));
         ageWoman = appConfig.getAge().get("woman");
         ageMan = appConfig.getAge().get("man");
+        secondFormMkbCodes = appConfig.getSecondFormMkbCodes();
     }
 
     public void mapBazaByProfile(Row row, List<Integer> fromColumns) {
@@ -104,6 +108,43 @@ public class RowToDataMapper {
             log.info("Adult " + ROW_NUM, row.getRowNum());
             adult.setAll(setAll(adult.getAll()));
         }
+    }
+
+    public void mapBazaForSecondForm(Row row, List<Integer> fromColumns) {
+        log.trace(ROW_NUM, row.getRowNum());
+        mkb = convertToString(row.getCell(fromColumns.get(1))).toLowerCase(Locale.ROOT).strip(); // МКБ заключительный
+        age = convertToString(row.getCell(fromColumns.get(2))); // возраст
+        resultOf = convertToString(row.getCell(fromColumns.get(3))); // результат госпитализации
+        secondFormMkbCodes.forEach((key, value) -> {
+            secondFormResult.putIfAbsent(key, new Pair<>(new SecondFormPeople(), new SecondFormPeople()));
+            value.forEach(code -> {
+                if (mkb.startsWith(code)) {
+                    if (resultOf.equalsIgnoreCase("умер")) {
+                        SecondFormPeople dead = secondFormResult.get(key).getSecond();
+                        parseAge(dead);
+                    } else {
+                        SecondFormPeople alive = secondFormResult.get(key).getFirst();
+                        parseAge(alive);
+                    }
+                }
+            });
+        });
+    }
+
+    private void parseAge(SecondFormPeople people) {
+        try {
+            double parsedAge = Double.parseDouble(age);
+            log.trace("age {}", parsedAge);
+            mapSecondFormPeopleByAge(people, parsedAge);
+        } catch (NumberFormatException e) {
+            double parsedAge = Double.parseDouble(age.strip().substring(0, age.length() - 5).strip());
+            log.info("age {}", parsedAge);
+            mapSecondFormPeopleByAge(people, parsedAge);
+        }
+    }
+
+    public Map<String, Pair<SecondFormPeople, SecondFormPeople>> getSecondFormResult() {
+        return secondFormResult;
     }
 
     private void mapRow(Row row, String key) {
@@ -161,6 +202,42 @@ public class RowToDataMapper {
         } catch (Exception e) {
             log.info("Adult " + ROW_NUM, row.getRowNum());
             data.setAdult(setPeople(data.getAdult(), urgent, delivered, duration, resultOf));
+        }
+    }
+
+    private void mapSecondFormPeopleByAge(SecondFormPeople people, double age) {
+        if (age < 15.0) {
+            people.incBelow14();
+        } else if (age < 20.0) {
+            people.incBetween15_19();
+        } else if (age < 25.0) {
+            people.incBetween20_24();
+        } else if (age < 30.0) {
+            people.incBetween25_29();
+        } else if (age < 35.0) {
+            people.incBetween30_34();
+        } else if (age < 40.0) {
+            people.incBetween35_39();
+        } else if (age < 45.0) {
+            people.incBetween40_44();
+        } else if (age < 50.0) {
+            people.incBetween45_49();
+        } else if (age < 55.0) {
+            people.incBetween50_54();
+        } else if (age < 60.0) {
+            people.incBetween55_59();
+        } else if (age < 65.0) {
+            people.incBetween60_64();
+        } else if (age < 70.0) {
+            people.incBetween65_69();
+        } else if (age < 75.0) {
+            people.incBetween70_74();
+        } else if (age < 80.0) {
+            people.incBetween75_79();
+        } else if (age < 85.0) {
+            people.incBetween80_84();
+        } else {
+            people.incAbove85();
         }
     }
 
