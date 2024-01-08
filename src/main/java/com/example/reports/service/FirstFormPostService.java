@@ -49,7 +49,14 @@ public class FirstFormPostService implements ReportService {
         log.trace(skipHeader.toString());
         while (rowIterator.hasNext()) {
             Row next = rowIterator.next();
-            if (!next.getCell(fromColumns.get(0)).getStringCellValue().toLowerCase().contains("(дневной стационар)")) {
+            String cellValue;
+            try {
+                cellValue = next.getCell(fromColumns.get(0)).getStringCellValue();
+            } catch (Exception e) {
+                log.error("Cannot get a STRING value for row {}", next.getRowNum());
+                throw new RuntimeException(e);
+            }
+            if (!cellValue.toLowerCase().contains("(дневной стационар)")) {
                 mapper.mapPost(next, fromColumns);
             }
         }

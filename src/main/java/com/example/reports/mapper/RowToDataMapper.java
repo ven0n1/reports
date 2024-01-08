@@ -15,11 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -97,7 +93,9 @@ public class RowToDataMapper {
             if (parsedAge < 18.0) {
                 log.trace("Child " + ROW_NUM, row.getRowNum());
                 child.setAll(setAll(child.getAll()));
-            } else if ((gender.equalsIgnoreCase("муж") && parsedAge < ageMan) || (gender.equalsIgnoreCase("жен") && parsedAge < ageWoman)) {
+            } else if (
+                    ((gender.equalsIgnoreCase("муж") || gender.equalsIgnoreCase("м")) && parsedAge < ageMan) ||
+                            ((gender.equalsIgnoreCase("жен") || gender.equalsIgnoreCase("ж")) && parsedAge < ageWoman)) {
                 log.trace("Adult " + ROW_NUM, row.getRowNum());
                 adult.setAll(setAll(adult.getAll()));
             } else {
@@ -152,7 +150,8 @@ public class RowToDataMapper {
         result.putIfAbsent(formatedKey, new Data());
         Data data = result.get(formatedKey);
         data.setAll(setPeople(data.getAll(), urgent, delivered, duration, resultOf));
-        distributeByAge(row, age, duration, resultOf, delivered, urgent, ageCategory, data);}
+        distributeByAge(row, age, duration, resultOf, delivered, urgent, ageCategory, data);
+    }
 
     private void setVariable(Row row, List<Integer> fromColumns) {
         gender = convertToString(row.getCell(fromColumns.get(1))); // пол
@@ -192,7 +191,9 @@ public class RowToDataMapper {
             if (parsedAge < 18.0) {
                 log.trace("Child " + ROW_NUM, row.getRowNum());
                 data.setChild(setPeople(data.getChild(), urgent, delivered, duration, resultOf));
-            } else if ((gender.equalsIgnoreCase("муж") && parsedAge < ageMan) || (gender.equalsIgnoreCase("жен") && parsedAge < ageWoman)) {
+            } else if (
+                    ((gender.equalsIgnoreCase("муж") || gender.equalsIgnoreCase("м")) && parsedAge < ageMan) ||
+                            ((gender.equalsIgnoreCase("жен") || gender.equalsIgnoreCase("ж")) && parsedAge < ageWoman)) {
                 log.trace("Adult " + ROW_NUM, row.getRowNum());
                 data.setAdult(setPeople(data.getAdult(), urgent, delivered, duration, resultOf));
             } else {
@@ -273,7 +274,7 @@ public class RowToDataMapper {
 //            emergency++;
 //        }
         if (urgent.equalsIgnoreCase("Доставлен бригадой скорой помощи") ||
-            urgent.startsWith("МБУЗ") || urgent.equalsIgnoreCase("Экстренно")) {
+                urgent.startsWith("МБУЗ") || urgent.equalsIgnoreCase("Экстренно")) {
             emergency++;
         }
         return emergency;
@@ -291,7 +292,10 @@ public class RowToDataMapper {
     }
 
     private int setDays(String duration, int alreadyDuration) {
-        double parsed = Double.parseDouble(duration);
+        double parsed = 0;
+        try {
+            parsed = Double.parseDouble(duration);
+        } catch (NumberFormatException ignored) {}
         alreadyDuration += parsed;
         return alreadyDuration;
     }

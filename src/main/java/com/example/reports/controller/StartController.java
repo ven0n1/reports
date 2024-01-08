@@ -1,8 +1,8 @@
 package com.example.reports.controller;
 
+import com.example.reports.service.FourteenFormService;
 import com.example.reports.service.ReportService;
 import com.example.reports.service.ReportsSaving;
-import com.example.reports.service.SecondFormService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.example.reports.util.PathsConstants.FOR_SECOND_BAZA;
+import static com.example.reports.util.PathsConstants.FOR_FOURTEEN_BAZA;
 import static com.example.reports.util.PathsConstants.FROM_BAZA;
 
 @RestController
@@ -40,13 +40,13 @@ public class StartController {
 //        checkSpecificService(FirstFormPostService.class);
 //        reportsSaving.saveToFirstForm();
 
-//        copyToDirectory(FOR_FOURTEEN_BAZA, FROM_BAZA);
-//        checkSpecificService(FourteenFormService.class);
-//        reportsSaving.saveToFourteenForm();
+        copyToDirectory(FOR_FOURTEEN_BAZA, FROM_BAZA);
+        checkSpecificService(FourteenFormService.class);
+        reportsSaving.saveToFourteenForm();
 
-        copyToDirectory(FOR_SECOND_BAZA, FROM_BAZA);
-        checkSpecificService(SecondFormService.class);
-        reportsSaving.saveToSecondForm(); // в столбец: всего (5б 23) нужно самостоятельно закинуть (лень это в коде прописывать)
+//        copyToDirectory(FOR_SECOND_BAZA, FROM_BAZA);
+//        checkSpecificService(SecondFormService.class);
+//        reportsSaving.saveToSecondForm(); // в столбец: всего (5б 23) нужно самостоятельно закинуть (лень это в коде прописывать)
     }
 
 //    public static void main(String[] args) {

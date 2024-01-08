@@ -19,10 +19,10 @@ import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +31,6 @@ public class ReportsSaving {
     private static final String CURRENT_ENTRY = "current entry: {}";
 
     private static final String BEGIN_FILL = "begin fill: {}";
-    private static final String DEPARTMENT_UTIL_BUT_NOT_RESUL = "DepartmentUtil has: {}, but result does not";
 
     private final List<ReportService> reports;
     private final AppConfig appConfig;
@@ -139,8 +138,6 @@ public class ReportsSaving {
                             fourteen.get(key).getChild().getAmbulance(),
                             fourteen.get(key).getChild().getDays(),
                             fourteen.get(key).getChild().getDied());
-                } else {
-                    log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
                 }
             }
 
@@ -219,8 +216,6 @@ public class ReportsSaving {
                         baza.get(key).getAdult().getDays(),
                         baza.get(key).getChild().getDays(),
                         baza.get(key).getOld().getDays());
-            } else {
-                log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
     }
@@ -251,8 +246,6 @@ public class ReportsSaving {
                         post.get(key).getChild().getAll(),
                         post.get(key).getAdult().getAll(),
                         post.get(key).getOld().getAll());
-            } else {
-                log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
 //        for (Map.Entry<String, Data> entry : post.entrySet()) {
@@ -303,8 +296,6 @@ public class ReportsSaving {
                         (first.get(key).getAdult().getDays() + first.get(key).getOld().getDays()),
                         first.get(key).getOld().getDays(),
                         first.get(key).getChild().getDays());
-            } else {
-                log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
     }
@@ -331,8 +322,6 @@ public class ReportsSaving {
                         (withoutDied(secondAndThird.get(key).getAdult()) + withoutDied(secondAndThird.get(key).getOld())),
                         (secondAndThird.get(key).getAdult().getDays() + secondAndThird.get(key).getOld().getDays()),
                         (secondAndThird.get(key).getAdult().getDied() + secondAndThird.get(key).getOld().getDied()));
-            } else {
-                log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
     }
@@ -358,8 +347,6 @@ public class ReportsSaving {
                         withoutDied(secondAndThird.get(key).getChild()),
                         secondAndThird.get(key).getChild().getDays(),
                         secondAndThird.get(key).getChild().getDied());
-            } else {
-                log.debug(DEPARTMENT_UTIL_BUT_NOT_RESUL, key);
             }
         }
     }
@@ -393,7 +380,7 @@ public class ReportsSaving {
 
     private void checkDepartmentUtilMapKeys(Set<String> departmentUtilMapKeys, Set<String> resultMapKeys) {
         if (!departmentUtilMapKeys.containsAll(resultMapKeys)) {
-            Set<String> temp = new HashSet<>(resultMapKeys);
+            Set<String> temp = new TreeSet<>(resultMapKeys);
             temp.removeAll(departmentUtilMapKeys);
             if (temp.size() == 1 && temp.contains("")) {
                 return;
@@ -467,291 +454,291 @@ public class ReportsSaving {
 
     private void groupCD4(Sheet sheet) {
         // C84 3.1.1.7
-        Integer[] rowsFrom = {30, 31};
-        Row rowTo = sheet.getRow(29);
+        Integer[] rowsFrom = {34, 33};
+        Row rowTo = sheet.getRow(32);
         groupRows(rowTo, rowsFrom, sheet);
         // C81-C96 3.1.1
-        rowsFrom = new Integer[]{23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 35, 36};
-        rowTo = sheet.getRow(22);
+        rowsFrom = new Integer[]{26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39};
+        rowTo = sheet.getRow(25);
         groupRows(rowTo, rowsFrom, sheet);
         // C00-C97 3.1
-        rowsFrom = new Integer[]{22, 37};
+        rowsFrom = new Integer[]{22, 23, 25, 40};
         rowTo = sheet.getRow(21);
         groupRows(rowTo, rowsFrom, sheet);
 
         // D10-D36 3.3
-        rowsFrom = new Integer[]{40, 41};
-        rowTo = sheet.getRow(39);
+        rowsFrom = new Integer[]{42, 43, 44};
+        rowTo = sheet.getRow(41);
         groupRows(rowTo, rowsFrom, sheet);
 
         // C00-D48 3.0
-        rowsFrom = new Integer[]{21, 38, 39, 42};
+        rowsFrom = new Integer[]{21, 41, 44};
         rowTo = sheet.getRow(20);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupD5(Sheet sheet) {
         // D50-D64 4.1
-        Integer[] rowsFrom = {45, 46};
-        Row rowTo = sheet.getRow(44);
+        Integer[] rowsFrom = {47, 48};
+        Row rowTo = sheet.getRow(46);
         groupRows(rowTo, rowsFrom, sheet);
         // D65-D69 4.2
-        rowsFrom = new Integer[]{48, 49};
-        rowTo = sheet.getRow(47);
+        rowsFrom = new Integer[]{50, 51};
+        rowTo = sheet.getRow(49);
         groupRows(rowTo, rowsFrom, sheet);
         // D50-D89 4.0
-        rowsFrom = new Integer[]{44, 47, 50, 51};
-        rowTo = sheet.getRow(43);
+        rowsFrom = new Integer[]{46, 49, 52, 53};
+        rowTo = sheet.getRow(45);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupE(Sheet sheet) {
         // E10-E14 5.4
-        Integer[] rowsFrom = {57, 58, 59, 60, 61};
-        Row rowTo = sheet.getRow(56);
+        Integer[] rowsFrom = {59, 60, 61, 62, 63};
+        Row rowTo = sheet.getRow(58);
         groupRows(rowTo, rowsFrom, sheet);
         // E00-E89 5.0
-        rowsFrom = new Integer[]{53, 54, 55, 56, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74};
-        rowTo = sheet.getRow(52);
+        rowsFrom = new Integer[]{55, 56, 57, 58, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76};
+        rowTo = sheet.getRow(54);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupF(Sheet sheet) {
         // F01-F99 6.0
-        Integer[] rowsFrom = {76, 77};
-        Row rowTo = sheet.getRow(75);
+        Integer[] rowsFrom = {78, 79};
+        Row rowTo = sheet.getRow(77);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupG(Sheet sheet) {
         // G00-G09 7.1
-        Integer[] rowsFrom = {80, 81, 82};
-        Row rowTo = sheet.getRow(79);
+        Integer[] rowsFrom = {82, 83, 84};
+        Row rowTo = sheet.getRow(81);
         groupRows(rowTo, rowsFrom, sheet);
         // G20-G25 7.3
-        rowsFrom = new Integer[]{85, 86, 87};
-        rowTo = sheet.getRow(84);
+        rowsFrom = new Integer[]{87, 88, 89};
+        rowTo = sheet.getRow(86);
         groupRows(rowTo, rowsFrom, sheet);
         // G30-G31 7.4
-        rowsFrom = new Integer[]{89, 90};
-        rowTo = sheet.getRow(88);
+        rowsFrom = new Integer[]{91, 92};
+        rowTo = sheet.getRow(90);
         groupRows(rowTo, rowsFrom, sheet);
         // G35-G37 7.5
-        rowsFrom = new Integer[]{92, 93};
-        rowTo = sheet.getRow(91);
+        rowsFrom = new Integer[]{94, 95};
+        rowTo = sheet.getRow(93);
         groupRows(rowTo, rowsFrom, sheet);
         // G40-G47 7.6
-        rowsFrom = new Integer[]{95, 96, 97};
-        rowTo = sheet.getRow(94);
+        rowsFrom = new Integer[]{97, 98, 99};
+        rowTo = sheet.getRow(96);
         groupRows(rowTo, rowsFrom, sheet);
         // G50-G64 7.7
-        rowsFrom = new Integer[]{99, 100};
-        rowTo = sheet.getRow(98);
+        rowsFrom = new Integer[]{101, 102};
+        rowTo = sheet.getRow(100);
         groupRows(rowTo, rowsFrom, sheet);
         // G70-G73 7.8
-        rowsFrom = new Integer[]{102, 103, 104};
-        rowTo = sheet.getRow(101);
+        rowsFrom = new Integer[]{104, 105, 106};
+        rowTo = sheet.getRow(103);
         groupRows(rowTo, rowsFrom, sheet);
         // G80-G83 7.9
-        rowsFrom = new Integer[]{106, 107};
-        rowTo = sheet.getRow(105);
+        rowsFrom = new Integer[]{108, 109};
+        rowTo = sheet.getRow(107);
         groupRows(rowTo, rowsFrom, sheet);
         // G00-G98 7.0
-        rowsFrom = new Integer[]{79, 83, 84, 88, 91, 94, 98, 101, 105, 108, 109, 110};
-        rowTo = sheet.getRow(78);
+        rowsFrom = new Integer[]{81, 85, 86, 90, 93, 96, 100, 103, 107, 110, 111, 112};
+        rowTo = sheet.getRow(80);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupH(Sheet sheet) {
         // H46-H48 8.8
-        Integer[] rowsFrom = {120, 121};
-        Row rowTo = sheet.getRow(119);
+        Integer[] rowsFrom = {122, 123};
+        Row rowTo = sheet.getRow(121);
         groupRows(rowTo, rowsFrom, sheet);
         // H54 8.9
-        rowsFrom = new Integer[]{123, 124};
-        rowTo = sheet.getRow(122);
+        rowsFrom = new Integer[]{125, 126};
+        rowTo = sheet.getRow(124);
         groupRows(rowTo, rowsFrom, sheet);
         // H00-H59 8.0
-        rowsFrom = new Integer[]{112, 113, 114, 115, 116, 117, 118, 119, 122, 125};
-        rowTo = sheet.getRow(111);
+        rowsFrom = new Integer[]{114, 115, 116, 117, 118, 119, 120, 121, 124, 127};
+        rowTo = sheet.getRow(113);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupH6(Sheet sheet) {
         // H65-H74 9.1
-        Integer[] rowsFrom = {128, 129, 130, 131, 132, 133};
-        Row rowTo = sheet.getRow(127);
+        Integer[] rowsFrom = {130, 131, 132, 133, 134, 135};
+        Row rowTo = sheet.getRow(129);
         groupRows(rowTo, rowsFrom, sheet);
         // H81-H83 9.2
-        rowsFrom = new Integer[]{135, 136, 137};
-        rowTo = sheet.getRow(134);
+        rowsFrom = new Integer[]{137, 138, 139};
+        rowTo = sheet.getRow(136);
         groupRows(rowTo, rowsFrom, sheet);
         // H90 9.3
-        rowsFrom = new Integer[]{139, 140, 141};
-        rowTo = sheet.getRow(138);
+        rowsFrom = new Integer[]{141, 142, 143};
+        rowTo = sheet.getRow(140);
         groupRows(rowTo, rowsFrom, sheet);
         // H60-H95 9.0
-        rowsFrom = new Integer[]{127, 134, 138, 142};
-        rowTo = sheet.getRow(126);
+        rowsFrom = new Integer[]{129, 136, 140, 144};
+        rowTo = sheet.getRow(128);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupI(Sheet sheet) {
         // I05-I09 10.2
-        Integer[] rowsFrom = {146, 147};
-        Row rowTo = sheet.getRow(145);
+        Integer[] rowsFrom = {148, 149};
+        Row rowTo = sheet.getRow(147);
         groupRows(rowTo, rowsFrom, sheet);
         // I10-I13 10.3
-        rowsFrom = new Integer[]{149, 150, 151, 152};
-        rowTo = sheet.getRow(148);
+        rowsFrom = new Integer[]{151, 152, 153, 154};
+        rowTo = sheet.getRow(150);
         groupRows(rowTo, rowsFrom, sheet);
         // I20 10.4.1
-        rowsFrom = new Integer[]{155, 156};
-        rowTo = sheet.getRow(154);
+        rowsFrom = new Integer[]{157, 158};
+        rowTo = sheet.getRow(156);
         groupRows(rowTo, rowsFrom, sheet);
         // I25 10.4.5
-        rowsFrom = new Integer[]{161, 162};
-        rowTo = sheet.getRow(160);
+        rowsFrom = new Integer[]{163, 164};
+        rowTo = sheet.getRow(162);
         groupRows(rowTo, rowsFrom, sheet);
         // I20-I25 10.4
-        rowsFrom = new Integer[]{154, 157, 158, 159, 160};
-        rowTo = sheet.getRow(153);
+        rowsFrom = new Integer[]{156, 159, 160, 161, 162};
+        rowTo = sheet.getRow(155);
         groupRows(rowTo, rowsFrom, sheet);
         // I30-I51 10.6
-        rowsFrom = new Integer[]{165, 166, 167, 168, 169, 170, 171, 172, 173, 174};
-        rowTo = sheet.getRow(164);
+        rowsFrom = new Integer[]{168, 169, 170, 171, 172, 173, 174, 175, 176, 177};
+        rowTo = sheet.getRow(167);
         groupRows(rowTo, rowsFrom, sheet);
         // I67 10.7.6
-        rowsFrom = new Integer[]{182, 183};
-        rowTo = sheet.getRow(181);
+        rowsFrom = new Integer[]{185, 186};
+        rowTo = sheet.getRow(184);
         groupRows(rowTo, rowsFrom, sheet);
         // I60-I69 10.7
-        rowsFrom = new Integer[]{176, 177, 178, 179, 180, 181};
-        rowTo = sheet.getRow(175);
+        rowsFrom = new Integer[]{179, 180, 181, 182, 183, 184, 187};
+        rowTo = sheet.getRow(178);
         groupRows(rowTo, rowsFrom, sheet);
         // I80-I89 10.9
-        rowsFrom = new Integer[]{186, 187, 188, 189};
-        rowTo = sheet.getRow(185);
+        rowsFrom = new Integer[]{190, 191, 192, 193};
+        rowTo = sheet.getRow(189);
         groupRows(rowTo, rowsFrom, sheet);
         // I00-I99 10.0
-        rowsFrom = new Integer[]{144, 145, 148, 153, 163, 164, 175, 184, 185, 190};
-        rowTo = sheet.getRow(143);
+        rowsFrom = new Integer[]{146, 147, 150, 155, 165, 166, 167, 178, 188, 189, 194};
+        rowTo = sheet.getRow(145);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupJ(Sheet sheet) {
         // J00-J06 11.1
-        Integer[] rowsFrom = {193, 194, 195};
-        Row rowTo = sheet.getRow(192);
+        Integer[] rowsFrom = {197, 198, 199};
+        Row rowTo = sheet.getRow(196);
         groupRows(rowTo, rowsFrom, sheet);
         // J00-J98 11.0
-        rowsFrom = new Integer[]{192, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206};
-        rowTo = sheet.getRow(191);
+        rowsFrom = new Integer[]{196, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210};
+        rowTo = sheet.getRow(195);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupK(Sheet sheet) {
         // K50-K52 12.4
-        Integer[] rowsFrom = {212, 213, 214};
-        Row rowTo = sheet.getRow(211);
+        Integer[] rowsFrom = {216, 217, 218};
+        Row rowTo = sheet.getRow(215);
         groupRows(rowTo, rowsFrom, sheet);
         // K55-K63 12.5
-        rowsFrom = new Integer[]{216, 217, 218, 219, 220, 221};
-        rowTo = sheet.getRow(215);
+        rowsFrom = new Integer[]{220, 221, 222, 223, 224, 225};
+        rowTo = sheet.getRow(219);
         groupRows(rowTo, rowsFrom, sheet);
         // K70-K76 12.8
-        rowsFrom = new Integer[]{224, 225};
-        rowTo = sheet.getRow(223);
-        groupRows(rowTo, rowsFrom, sheet);
-        // K85-K86 12.10
         rowsFrom = new Integer[]{228, 229};
         rowTo = sheet.getRow(227);
         groupRows(rowTo, rowsFrom, sheet);
+        // K85-K86 12.10
+        rowsFrom = new Integer[]{232, 233};
+        rowTo = sheet.getRow(231);
+        groupRows(rowTo, rowsFrom, sheet);
         // K00-K92 12.0
-        rowsFrom = new Integer[]{208, 209, 210, 211, 215, 222, 223, 226, 227, 230};
+        rowsFrom = new Integer[]{212, 213, 214, 215, 219, 226, 227, 230, 231, 234};
         rowTo = sheet.getRow(207);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupL(Sheet sheet) {
         // L40 13.4
-        Integer[] rowsFrom = {236, 237};
-        Row rowTo = sheet.getRow(235);
+        Integer[] rowsFrom = {241, 242};
+        Row rowTo = sheet.getRow(240);
         groupRows(rowTo, rowsFrom, sheet);
         // L00-L98 13.0
-        rowsFrom = new Integer[]{232, 233, 234, 235, 238, 239, 240};
-        rowTo = sheet.getRow(231);
+        rowsFrom = new Integer[]{236, 237, 238, 239, 240, 243, 244, 245};
+        rowTo = sheet.getRow(235);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupM(Sheet sheet) {
         // M00-M25 14.1
-        Integer[] rowsFrom = {243, 244, 245, 246, 247};
-        Row rowTo = sheet.getRow(242);
+        Integer[] rowsFrom = {248, 249, 250, 251, 252};
+        Row rowTo = sheet.getRow(247);
         groupRows(rowTo, rowsFrom, sheet);
         // M30-M35 14.2
-        rowsFrom = new Integer[]{249, 250};
-        rowTo = sheet.getRow(248);
+        rowsFrom = new Integer[]{254, 255};
+        rowTo = sheet.getRow(253);
         groupRows(rowTo, rowsFrom, sheet);
         // M45-M49 14.4
-        rowsFrom = new Integer[]{253, 254};
-        rowTo = sheet.getRow(252);
-        groupRows(rowTo, rowsFrom, sheet);
-        // M80-M94 14.7
         rowsFrom = new Integer[]{258, 259};
         rowTo = sheet.getRow(257);
         groupRows(rowTo, rowsFrom, sheet);
+        // M80-M94 14.7
+        rowsFrom = new Integer[]{263, 264};
+        rowTo = sheet.getRow(262);
+        groupRows(rowTo, rowsFrom, sheet);
         // M00-M99 14.0
-        rowsFrom = new Integer[]{242, 248, 251, 252, 255, 256, 257, 260};
-        rowTo = sheet.getRow(241);
+        rowsFrom = new Integer[]{247, 253, 256, 257, 260, 261, 262, 265};
+        rowTo = sheet.getRow(246);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupN(Sheet sheet) {
         // N70-N76 15.7
-        Integer[] rowsFrom = {269, 270};
-        Row rowTo = sheet.getRow(268);
+        Integer[] rowsFrom = {274, 275};
+        Row rowTo = sheet.getRow(273);
         groupRows(rowTo, rowsFrom, sheet);
         // N00-N99 15.0
-        rowsFrom = new Integer[]{262, 263, 264, 265, 266, 267, 268, 271, 272, 273, 274, 275};
-        rowTo = sheet.getRow(261);
+        rowsFrom = new Integer[]{267, 268, 269, 270, 271, 272, 273, 276, 277, 278, 279, 280};
+        rowTo = sheet.getRow(266);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupQ(Sheet sheet) {
         // Q38-Q45 18.4
-        Integer[] rowsFrom = {283, 284};
-        Row rowTo = sheet.getRow(282);
+        Integer[] rowsFrom = {288, 289};
+        Row rowTo = sheet.getRow(287);
         groupRows(rowTo, rowsFrom, sheet);
         // Q00-Q99 18.0
-        rowsFrom = new Integer[]{279, 280, 281, 282, 285, 286, 287, 288, 289, 290};
-        rowTo = sheet.getRow(278);
+        rowsFrom = new Integer[]{284, 285, 286, 287, 290, 291, 292, 293, 294, 295};
+        rowTo = sheet.getRow(283);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupR(Sheet sheet) {
-        // R16 - R17
-        Integer[] rowsFrom = {301};
-        Row rowTo = sheet.getRow(291);
+        // R00-R99
+        Integer[] rowsFrom = {306, 316, 331};
+        Row rowTo = sheet.getRow(296);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
     private void groupST(Sheet sheet) {
         // S*2-T14 20.1
-        Integer[] rowsFrom = {343, 344};
-        Row rowTo = sheet.getRow(342);
+        Integer[] rowsFrom = {348, 349};
+        Row rowTo = sheet.getRow(347);
         groupRows(rowTo, rowsFrom, sheet);
         // T36-T50 20.5
-        rowsFrom = new Integer[]{349, 350};
-        rowTo = sheet.getRow(348);
+        rowsFrom = new Integer[]{354, 355};
+        rowTo = sheet.getRow(353);
         groupRows(rowTo, rowsFrom, sheet);
         // T51-T65 20.6
-        rowsFrom = new Integer[]{352, 353};
-        rowTo = sheet.getRow(351);
+        rowsFrom = new Integer[]{357, 358};
+        rowTo = sheet.getRow(356);
         groupRows(rowTo, rowsFrom, sheet);
         // Soo-T98 20.0
-        rowsFrom = new Integer[]{342, 345, 346, 347, 348, 351, 354};
-        rowTo = sheet.getRow(341);
+        rowsFrom = new Integer[]{347, 350, 351, 352, 353, 356, 359};
+        rowTo = sheet.getRow(346);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
@@ -768,7 +755,7 @@ public class ReportsSaving {
 
     private void subtractZ(Sheet sheet) {
         Row from = sheet.getRow(9); // ВСЕГО
-        Row z = sheet.getRow(355); // Z00-Z99 21.0
+        Row z = sheet.getRow(361); // Z00-Z99 21.0
         for (Integer column : fourteenColumns) {
             double valueFrom = from.getCell(column).getNumericCellValue();
             double valueZ = z.getCell(column).getNumericCellValue();
