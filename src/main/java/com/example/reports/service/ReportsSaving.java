@@ -178,7 +178,7 @@ public class ReportsSaving {
 
     private void fillBazaTable(Map<String, Data> baza, XSSFWorkbook workbook) {
         String key;
-        Integer value;
+        int value;
         Row row;
         log.debug(BEGIN_FILL, "Таблица 3100");
         // Sheet "Таблица 3100"
@@ -186,7 +186,7 @@ public class ReportsSaving {
         checkDepartmentUtilMapKeys(departmentUtil.getFirstForma().keySet(), baza.keySet());
         for (Map.Entry<String, Integer> entry : departmentUtil.getFirstForma().entrySet()) {
             log.debug(CURRENT_ENTRY, entry);
-            value = entry.getValue();
+            value = entry.getValue() - 1;
             key = entry.getKey();
             row = firstSheet.getRow(value);
             if (baza.get(key) != null) {
@@ -221,7 +221,7 @@ public class ReportsSaving {
     }
 
     private void fillPostTable(Map<String, Data> post, XSSFWorkbook workbook) {
-        Integer value;
+        int value;
         String key;
         Row row;
         log.debug(BEGIN_FILL, "Таблица 3100");
@@ -230,7 +230,7 @@ public class ReportsSaving {
         checkDepartmentUtilMapKeys(departmentUtil.getFirstForma().keySet(), post.keySet());
         for (Map.Entry<String, Integer> entry : departmentUtil.getFirstForma().entrySet()) {
             log.debug(CURRENT_ENTRY, entry);
-            value = entry.getValue();
+            value = entry.getValue() - 1;
             key = entry.getKey();
             row = firstSheet.getRow(value);
             if (post.get(key) != null) {
@@ -270,7 +270,7 @@ public class ReportsSaving {
 
     private void fillTableOne(Map<String, Data> first, XSSFWorkbook workbook) {
         String key;
-        Integer value;
+        int value;
         Row row;
         log.debug(BEGIN_FILL, "Таблица 2000");
         // Sheet "Таблица 2000"
@@ -278,7 +278,7 @@ public class ReportsSaving {
         checkDepartmentUtilMapKeys(departmentUtil.getDailyFormaFirstSheet().keySet(), first.keySet());
         for (Map.Entry<String, Integer> entry : departmentUtil.getDailyFormaFirstSheet().entrySet()) {
             log.debug(CURRENT_ENTRY, entry);
-            value = entry.getValue();
+            value = entry.getValue() - 1;
             key = entry.getKey();
             row = firstSheet.getRow(value);
             if (first.get(key) != null) {
@@ -303,14 +303,14 @@ public class ReportsSaving {
     private void fillTableTwo(Map<String, Data> secondAndThird, XSSFWorkbook workbook) {
         Row row;
         String key;
-        Integer value;
+        int value;
         log.debug(BEGIN_FILL, "Таблица 3000");
         // Sheet "Таблица 3000"
         XSSFSheet secondSheet = workbook.getSheet("Таблица3000");
         checkDepartmentUtilMapKeys(departmentUtil.getDailyFormaSecondSheet().keySet(), secondAndThird.keySet());
         for (Map.Entry<String, Integer> entry : departmentUtil.getDailyFormaSecondSheet().entrySet()) {
             log.debug(CURRENT_ENTRY, entry);
-            value = entry.getValue();
+            value = entry.getValue() - 1;
             key = entry.getKey();
             row = secondSheet.getRow(value);
             if (secondAndThird.get(key) != null) {
@@ -327,7 +327,7 @@ public class ReportsSaving {
     }
 
     private void fillTableThree(Map<String, Data> secondAndThird, XSSFWorkbook workbook) {
-        Integer value;
+        int value;
         String key;
         Row row;
         log.debug(BEGIN_FILL, "Таблица 3500");
@@ -335,7 +335,7 @@ public class ReportsSaving {
         XSSFSheet thirdSheet = workbook.getSheet("Таблица3500");
         for (Map.Entry<String, Integer> entry : departmentUtil.getDailyFormaSecondSheet().entrySet()) {
             log.debug(CURRENT_ENTRY, entry);
-            value = entry.getValue();
+            value = entry.getValue() - 1;
             key = entry.getKey();
             row = thirdSheet.getRow(value);
             if (secondAndThird.get(key) != null) {
@@ -656,7 +656,7 @@ public class ReportsSaving {
         groupRows(rowTo, rowsFrom, sheet);
         // K00-K92 12.0
         rowsFrom = new Integer[]{212, 213, 214, 215, 219, 226, 227, 230, 231, 234};
-        rowTo = sheet.getRow(207);
+        rowTo = sheet.getRow(211);
         groupRows(rowTo, rowsFrom, sheet);
     }
 
@@ -718,7 +718,7 @@ public class ReportsSaving {
 
     private void groupR(Sheet sheet) {
         // R00-R99
-        Integer[] rowsFrom = {306, 316, 331};
+        Integer[] rowsFrom = {297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345};
         Row rowTo = sheet.getRow(296);
         groupRows(rowTo, rowsFrom, sheet);
     }
